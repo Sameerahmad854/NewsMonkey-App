@@ -4,7 +4,6 @@ export class Newsitem extends Component {
   render() {
     let { title, description, imageurl, newsUrl, author, date } = this.props;
 
-    // ✅ fallback image (CORS safe)
     const fallbackImage = "https://via.placeholder.com/300x200?text=No+Image";
 
     return (
