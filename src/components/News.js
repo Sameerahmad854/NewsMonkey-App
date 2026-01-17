@@ -8,12 +8,14 @@ export class News extends Component {
   static defaultProps = {
     pageSize: 5,
     category: "general",
+    country: "us",
   };
 
   static propTypes = {
     pageSize: PropTypes.number,
     category: PropTypes.string,
     country: PropTypes.string,
+    setProgress: PropTypes.func,
   };
 
   capitalizeFirstLetter = (string) =>
@@ -23,55 +25,62 @@ export class News extends Component {
     super(props);
     this.state = {
       articles: [],
-      loading: true,
       page: 1,
       totalResults: 0,
+      loading: true,
     };
+
     document.title = `${this.capitalizeFirstLetter(
       this.props.category
-    )}-NewsMonkey`;
+    )} - NewsMonkey`;
   }
 
-  async componentDidMount() {
-    this.fetchNews();
+  componentDidMount() {
+    this.fetchNews(1);
   }
 
-  fetchNews = async (page = 1) => {
-    this.setState({ loading: true });
+  fetchNews = async (page) => {
     try {
-      const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=92c79a53d9504c6aae36b9323386a99b&page=${page}&pageSize=${this.props.pageSize}`;
+      this.props.setProgress && this.props.setProgress(30);
+
+      const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${page}&pageSize=${this.props.pageSize}`;
+
       let data = await fetch(url);
+      this.props.setProgress && this.props.setProgress(60);
+
       let parsedData = await data.json();
+      this.props.setProgress && this.props.setProgress(100);
 
       if (parsedData.status === "ok") {
         this.setState({
           articles: parsedData.articles || [],
           totalResults: parsedData.totalResults || 0,
-          loading: false,
           page: page,
+          loading: false,
         });
       } else {
-        console.error("API Error:", parsedData.message);
-        this.setState({ loading: false, articles: [] });
+        this.setState({ loading: false });
       }
     } catch (error) {
       console.error("Fetch Error:", error);
-      this.setState({ loading: false, articles: [] });
+      this.setState({ loading: false });
     }
   };
 
   fetchMoreData = async () => {
     const nextPage = this.state.page + 1;
+
     try {
-      const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=92c79a53d9504c6aae36b9323386a99b&page=${nextPage}&pageSize=${this.props.pageSize}`;
+      const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${nextPage}&pageSize=${this.props.pageSize}`;
+
       let data = await fetch(url);
       let parsedData = await data.json();
 
       if (parsedData.status === "ok") {
         this.setState({
           articles: this.state.articles.concat(parsedData.articles || []),
-          totalResults: parsedData.totalResults || 0,
           page: nextPage,
+          totalResults: parsedData.totalResults || 0,
         });
       }
     } catch (error) {
@@ -80,18 +89,14 @@ export class News extends Component {
   };
 
   render() {
-    const fallbackImage =
-      "https://placehold.co/300x200?text=No+Image&bg=cccccc&fg=000000";
+    const fallbackImage = "https://placehold.co/300x200?text=No+Image";
 
     return (
       <div className="container my-4">
         <h1 className="text-center">
-          {`NewsMonkey - Top ${this.capitalizeFirstLetter(
-            this.props.category
-          )} Headlines`}
+          NewsMonkey - Top {this.capitalizeFirstLetter(this.props.category)}{" "}
+          Headlines
         </h1>
-
-        {this.state.loading && <Spinner />}
 
         <InfiniteScroll
           dataLength={this.state.articles.length}
@@ -100,8 +105,8 @@ export class News extends Component {
           loader={<Spinner />}
         >
           <div className="row">
-            {this.state.articles.map((element) => (
-              <div className="col-md-4" key={element.url}>
+            {this.state.articles.map((element, index) => (
+              <div className="col-md-4" key={element.url || index}>
                 <Newsitem
                   title={element.title || ""}
                   description={element.description || ""}
