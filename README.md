@@ -1,70 +1,73 @@
-# Getting Started with Create React App
+# NewsMonkey App 📰
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**NewsMonkey** is a React-based news application that provides the latest news headlines from various categories like Business, Sports, Health, Technology, Science, and Entertainment. It uses the **NewsAPI.org** to fetch news data dynamically and implements infinite scrolling for a smooth user experience.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Features ✨
 
-### `npm start`
+1). **Category-based News:** Browse news by categories: General, Business, Entertainment, Health, Science, Sports, Technology.
+2). **Infinite Scroll:** Scroll down to load more news automatically.
+3). **React Function Components:** Fully built using React functional components with hooks (`useState`, `useEffect`, `useCallback`).
+4). **Loading Spinner:** Shows a spinner while fetching news.
+5). **Fallback Images:** Handles missing news images with a placeholder.
+6). **Dynamic Page Titles:** Updates document title according to the selected news category.
+7). **Environment Variables:** API key is stored in `.env` for security.
+8). **Responsive UI:** Built with Bootstrap 5 for mobile-friendly design.
+9). **Favicon & App Icon:** Supports custom favicon and Apple touch icon.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Installation ⚡
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. **Clone the repository:**
 
-### `npm test`
+   git clone https://github.com/yourusername/NewsMonkey-App.git
+   cd NewsMonkey-App
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Install dependencies:
 
-### `npm run build`
+npm install
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Setup environment variable:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1). Create a .env file in the root directory and add your NewsAPI.org API key:
+**REACT_APP_NEWS_API=your_api_key_here**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Start the development server:
 
-### `npm run eject`
+npm start
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Access in browser:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Open http://localhost:3000
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Usage
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1).Navigate using the navbar to switch between categories.
+2).Scroll down to automatically load more news using infinite scroll.
+3).If an article doesn't have an image, a placeholder image is displayed.
+4).Page title dynamically updates with the selected category.
 
-## Learn More
+## Dependencies
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+1)React (v18+)
+2)React Router DOM (v6)
+3)React Infinite Scroll Component
+4)Bootstrap 5
+5)PropTypes
+6)React Top Loading Bar (Optional for progress bar)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+# NewsMonkey 📰
 
-### Code Splitting
+A React-based news application that fetches top headlines from [NewsAPI](https://newsapi.org/) and displays them with infinite scroll.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Notes / Tips 💡
 
-### Analyzing the Bundle Size
+1. **API Rate Limits:** NewsAPI free tier allows limited requests. Exceeding the limit will return **429 Too Many Requests**.
+2. **Placeholder Images:** If `via.placeholder.com` fails due to DNS or network issues, fallback images won't display.
+3. **CORS:** Ensure your API key works for local development.
+4. **Environment Variables:** Always use `REACT_APP_` prefix for React to pick up `.env` variables. Example:  
+   REACT_APP_NEWS_API=your_api_key_here
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## License
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is open-source and free to use under the MIT License.
