@@ -31,7 +31,7 @@ npm start
 
 ## Access in browser:
 
-Open http://localhost:3000
+Open http://localhost:3001/NewsMonkey-App
 
 ## Usage
 
