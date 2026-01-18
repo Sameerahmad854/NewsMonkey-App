@@ -4,14 +4,13 @@ import NavBar from "./components/NavBar";
 import News from "./components/News";
 
 const App = () => {
-  const apiKey = process.env.REACT_APP_NEWS_API;
+  const apiKey = "bf6e7399812b4bbabe896b8f54c311c9";
 
   return (
     <>
       <NavBar />
       <Routes>
         <Route path="/" element={<Navigate to="/general" />} />
-
         <Route
           path="/general"
           element={
@@ -24,7 +23,6 @@ const App = () => {
             />
           }
         />
-
         <Route
           path="/business"
           element={
@@ -37,7 +35,6 @@ const App = () => {
             />
           }
         />
-
         <Route
           path="/entertainment"
           element={
@@ -50,7 +47,6 @@ const App = () => {
             />
           }
         />
-
         <Route
           path="/health"
           element={
@@ -63,7 +59,6 @@ const App = () => {
             />
           }
         />
-
         <Route
           path="/science"
           element={
@@ -76,7 +71,6 @@ const App = () => {
             />
           }
         />
-
         <Route
           path="/sports"
           element={
@@ -89,7 +83,6 @@ const App = () => {
             />
           }
         />
-
         <Route
           path="/technology"
           element={
