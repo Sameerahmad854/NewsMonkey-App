@@ -17,47 +17,57 @@ const News = ({ country, category, pageSize, apiKey }) => {
   const fallbackImage =
     "https://dummyimage.com/300x200/cccccc/000000&text=No+Image";
 
-  // Initial fetch
+  // fetchNews function
   const fetchNews = useCallback(async () => {
     setLoading(true);
-    const url = `https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=${apiKey}&page=1&pageSize=${pageSize}`;
-    try {
-      const data = await fetch(url);
-      const parsedData = await data.json();
 
-      console.log("Fetched Articles:", parsedData.articles.length);
-      console.log("Total Results:", parsedData.totalResults);
+    const getUrl = (pageNum) =>
+      `https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=${apiKey}&page=${pageNum}&pageSize=${pageSize}`;
+
+    try {
+      const data = await fetch(getUrl(1));
+      const parsedData = await data.json();
 
       if (parsedData.status === "ok") {
         setArticles(parsedData.articles || []);
         setTotalResults(parsedData.totalResults || 0);
         setPage(1);
+      } else {
+        // fallback JSON
+        const fallback = await import("../data/fallback.json");
+        setArticles(fallback.articles);
+        setTotalResults(fallback.totalResults);
+        setPage(1);
       }
     } catch (error) {
-      console.error("Error fetching news:", error);
+      console.error("Error fetching news, using fallback:", error);
+      const fallback = await import("../data/fallback.json");
+      setArticles(fallback.articles);
+      setTotalResults(fallback.totalResults);
+      setPage(1);
     }
+
     setLoading(false);
   }, [country, category, pageSize, apiKey]);
 
   // Fetch more for infinite scroll
   const fetchMoreData = async () => {
-    if (articles.length >= totalResults) return; // Prevent extra scroll fetch
+    if (articles.length >= totalResults) return;
 
     const nextPage = page + 1;
-    const url = `https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=${apiKey}&page=${nextPage}&pageSize=${pageSize}`;
+    const getUrl = (pageNum) =>
+      `https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=${apiKey}&page=${pageNum}&pageSize=${pageSize}`;
 
     try {
-      const data = await fetch(url);
+      const data = await fetch(getUrl(nextPage));
       const parsedData = await data.json();
-
-      console.log(
-        `Next Page ${nextPage} Articles:`,
-        parsedData.articles.length,
-      );
 
       if (parsedData.status === "ok" && parsedData.articles.length > 0) {
         setArticles((prev) => prev.concat(parsedData.articles));
         setPage(nextPage);
+      } else {
+        // optional: fallback for next page (rarely used)
+        console.warn("No more articles or API blocked.");
       }
     } catch (error) {
       console.error("Error fetching more news:", error);
@@ -104,7 +114,6 @@ const News = ({ country, category, pageSize, apiKey }) => {
         </div>
       </InfiniteScroll>
 
-      {/* Spinner at bottom while loading next page */}
       {loading && articles.length > 0 && <Spinner />}
     </div>
   );

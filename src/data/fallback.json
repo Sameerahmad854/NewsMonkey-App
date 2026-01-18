@@ -1,0 +1,22 @@
+{
+  "status": "ok",
+  "totalResults": 3,
+  "articles": [
+    {
+      "title": "Sample News 1",
+      "description": "This is a sample news description.",
+      "urlToImage": "https://dummyimage.com/300x200/cccccc/000000&text=News+1",
+      "url": "#",
+      "author": "Admin",
+      "publishedAt": "2026-01-18T10:00:00Z"
+    },
+    {
+      "title": "Sample News 2",
+      "description": "This is another news example.",
+      "urlToImage": "https://dummyimage.com/300x200/cccccc/000000&text=News+2",
+      "url": "#",
+      "author": "Admin",
+      "publishedAt": "2026-01-18T11:00:00Z"
+    }
+  ]
+}
