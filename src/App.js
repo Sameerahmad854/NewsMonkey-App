@@ -1,26 +1,14 @@
-import React, { useState } from "react";
-import "./App.css";
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import News from "./components/News";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
-import LoadingBar from "react-top-loading-bar";
 
 const App = () => {
-  const apiKey = process.env.REACT_APP_NEWS_API; // your API key from env
-  const [progress, setProgress] = useState(0);
+  const apiKey = process.env.REACT_APP_NEWS_API;
 
   return (
-    <Router>
+    <>
       <NavBar />
-
-      {/* Top Loading Bar */}
-      <LoadingBar color="#c21c3d" progress={progress} height={3} />
-
       <Routes>
         <Route path="/" element={<Navigate to="/general" />} />
 
@@ -28,12 +16,11 @@ const App = () => {
           path="/general"
           element={
             <News
-              setProgress={setProgress}
               apiKey={apiKey}
               key="general"
-              pageSize={5}
-              country="us"
               category="general"
+              country="us"
+              pageSize={5}
             />
           }
         />
@@ -42,12 +29,11 @@ const App = () => {
           path="/business"
           element={
             <News
-              setProgress={setProgress}
               apiKey={apiKey}
               key="business"
-              pageSize={5}
-              country="us"
               category="business"
+              country="us"
+              pageSize={10}
             />
           }
         />
@@ -56,12 +42,11 @@ const App = () => {
           path="/entertainment"
           element={
             <News
-              setProgress={setProgress}
               apiKey={apiKey}
               key="entertainment"
-              pageSize={5}
-              country="us"
               category="entertainment"
+              country="us"
+              pageSize={5}
             />
           }
         />
@@ -70,12 +55,11 @@ const App = () => {
           path="/health"
           element={
             <News
-              setProgress={setProgress}
               apiKey={apiKey}
               key="health"
-              pageSize={5}
-              country="us"
               category="health"
+              country="us"
+              pageSize={5}
             />
           }
         />
@@ -84,12 +68,11 @@ const App = () => {
           path="/science"
           element={
             <News
-              setProgress={setProgress}
               apiKey={apiKey}
               key="science"
-              pageSize={5}
-              country="us"
               category="science"
+              country="us"
+              pageSize={5}
             />
           }
         />
@@ -98,12 +81,11 @@ const App = () => {
           path="/sports"
           element={
             <News
-              setProgress={setProgress}
               apiKey={apiKey}
               key="sports"
-              pageSize={5}
-              country="us"
               category="sports"
+              country="us"
+              pageSize={5}
             />
           }
         />
@@ -112,17 +94,16 @@ const App = () => {
           path="/technology"
           element={
             <News
-              setProgress={setProgress}
               apiKey={apiKey}
               key="technology"
-              pageSize={5}
-              country="us"
               category="technology"
+              country="us"
+              pageSize={5}
             />
           }
         />
       </Routes>
-    </Router>
+    </>
   );
 };
 

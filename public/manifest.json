@@ -1,5 +1,5 @@
 {
-  "short_name": "React App",
+  "short_name": "NewsMonkey",
   "name": "Create React App Sample",
   "icons": [
     {
@@ -19,6 +19,8 @@
     }
   ],
   "start_url": ".",
+  "scope": "/",
+
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
