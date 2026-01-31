@@ -1,135 +1,70 @@
-// src/components/News.js
-import React, { useEffect, useState, useCallback } from "react";
-import Spinner from "./Spinner";
+import React, { useEffect, useState } from "react";
 import Newsitem from "./Newsitem";
-import PropTypes from "prop-types";
-import InfiniteScroll from "react-infinite-scroll-component";
+import Spinner from "./Spinner";
 
-const News = ({ country, category, pageSize, apiKey }) => {
+const News = ({ query, pageSize, apiKey }) => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
-  const [totalResults, setTotalResults] = useState(0);
+  const [error, setError] = useState("");
 
-  const capitalizeFirstLetter = (string) =>
-    string.charAt(0).toUpperCase() + string.slice(1);
-
-  const fallbackImage =
-    "https://dummyimage.com/300x200/cccccc/000000&text=No+Image";
-
-  // fetchNews function
-  const fetchNews = useCallback(async () => {
+  const fetchNews = async () => {
     setLoading(true);
+    setError("");
 
-    const getUrl = (pageNum) =>
-      `https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=${apiKey}&page=${pageNum}&pageSize=${pageSize}`;
+    // eslint-disable-next-line
+    const url = `https://newsapi.org/v2/top-headlines?country=us&category=${query}&pageSize=${pageSize}&apiKey=${apiKey}`;
 
     try {
-      const data = await fetch(getUrl(1));
-      const parsedData = await data.json();
+      const res = await fetch(url);
 
-      if (parsedData.status === "ok") {
-        setArticles(parsedData.articles || []);
-        setTotalResults(parsedData.totalResults || 0);
-        setPage(1);
-      } else {
-        // fallback JSON
-        const fallback = await import("../data/fallback.json");
-        setArticles(fallback.articles);
-        setTotalResults(fallback.totalResults);
-        setPage(1);
+      if (res.status === 429) {
+        setError("Too many requests. Please wait and try again later.");
+        setLoading(false);
+        return;
       }
-    } catch (error) {
-      console.error("Error fetching news, using fallback:", error);
-      const fallback = await import("../data/fallback.json");
-      setArticles(fallback.articles);
-      setTotalResults(fallback.totalResults);
-      setPage(1);
+
+      const data = await res.json();
+
+      if (data.status === "ok") setArticles(data.articles);
+      else setError("Failed to load news.");
+    } catch (err) {
+      setError("Network error.");
     }
 
     setLoading(false);
-  }, [country, category, pageSize, apiKey]);
-
-  // Fetch more for infinite scroll
-  const fetchMoreData = async () => {
-    if (articles.length >= totalResults) return;
-
-    const nextPage = page + 1;
-    const getUrl = (pageNum) =>
-      `https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=${apiKey}&page=${pageNum}&pageSize=${pageSize}`;
-
-    try {
-      const data = await fetch(getUrl(nextPage));
-      const parsedData = await data.json();
-
-      if (parsedData.status === "ok" && parsedData.articles.length > 0) {
-        setArticles((prev) => prev.concat(parsedData.articles));
-        setPage(nextPage);
-      } else {
-        // optional: fallback for next page (rarely used)
-        console.warn("No more articles or API blocked.");
-      }
-    } catch (error) {
-      console.error("Error fetching more news:", error);
-    }
   };
 
   useEffect(() => {
-    document.title = `${capitalizeFirstLetter(category)} - NewsMonkey`;
     fetchNews();
-  }, [category, fetchNews]);
+    // eslint-disable-next-line
+  }, [query]);
 
   return (
     <div className="container my-4">
       <h1 className="text-center" style={{ marginTop: "90px" }}>
-        NewsMonkey - Top {capitalizeFirstLetter(category)} Headlines
+        Top News about {query.charAt(0).toUpperCase() + query.slice(1)}
       </h1>
 
-      {loading && articles.length === 0 && <Spinner />}
+      {loading && <Spinner />}
 
-      <InfiniteScroll
-        dataLength={articles.length}
-        next={fetchMoreData}
-        hasMore={articles.length < totalResults}
-        loader={<Spinner />}
-        scrollThreshold={0.9}
-      >
-        <div className="row">
-          {articles.map((element, index) => (
-            <div className="col-md-4" key={element.url || index}>
-              <Newsitem
-                title={element.title || ""}
-                description={element.description || ""}
-                imageurl={element.urlToImage || fallbackImage}
-                newsUrl={element.url}
-                author={element.author || "Unknown"}
-                date={
-                  element.publishedAt
-                    ? new Date(element.publishedAt).toGMTString()
-                    : ""
-                }
-              />
-            </div>
-          ))}
-        </div>
-      </InfiniteScroll>
+      {error && <div className="alert alert-warning text-center">{error}</div>}
 
-      {loading && articles.length > 0 && <Spinner />}
+      <div className="row">
+        {articles.map((item, index) => (
+          <div className="col-md-4" key={item.url || index}>
+            <Newsitem
+              title={item.title}
+              description={item.description}
+              imageurl={item.urlToImage}
+              newsUrl={item.url}
+              author={item.author}
+              date={item.publishedAt}
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
-};
-
-News.defaultProps = {
-  pageSize: 5,
-  category: "general",
-  country: "us",
-};
-
-News.propTypes = {
-  pageSize: PropTypes.number,
-  category: PropTypes.string,
-  country: PropTypes.string,
-  apiKey: PropTypes.string.isRequired,
 };
 
 export default News;

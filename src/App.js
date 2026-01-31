@@ -4,97 +4,31 @@ import NavBar from "./components/NavBar";
 import News from "./components/News";
 
 const App = () => {
-  const apiKey = "bf6e7399812b4bbabe896b8f54c311c9";
+  const apiKey = "92c79a53d9504c6aae36b9323386a99b";
+  const categories = [
+    "general",
+    "business",
+    "entertainment",
+    "health",
+    "science",
+    "sports",
+    "technology",
+    "tesla",
+  ];
 
   return (
     <>
       <NavBar />
       <Routes>
         <Route path="/" element={<Navigate to="/general" />} />
-        <Route
-          path="/general"
-          element={
-            <News
-              apiKey={apiKey}
-              key="general"
-              category="general"
-              country="us"
-              pageSize={5}
-            />
-          }
-        />
-        <Route
-          path="/business"
-          element={
-            <News
-              apiKey={apiKey}
-              key="business"
-              category="business"
-              country="us"
-              pageSize={10}
-            />
-          }
-        />
-        <Route
-          path="/entertainment"
-          element={
-            <News
-              apiKey={apiKey}
-              key="entertainment"
-              category="entertainment"
-              country="us"
-              pageSize={5}
-            />
-          }
-        />
-        <Route
-          path="/health"
-          element={
-            <News
-              apiKey={apiKey}
-              key="health"
-              category="health"
-              country="us"
-              pageSize={5}
-            />
-          }
-        />
-        <Route
-          path="/science"
-          element={
-            <News
-              apiKey={apiKey}
-              key="science"
-              category="science"
-              country="us"
-              pageSize={5}
-            />
-          }
-        />
-        <Route
-          path="/sports"
-          element={
-            <News
-              apiKey={apiKey}
-              key="sports"
-              category="sports"
-              country="us"
-              pageSize={5}
-            />
-          }
-        />
-        <Route
-          path="/technology"
-          element={
-            <News
-              apiKey={apiKey}
-              key="technology"
-              category="technology"
-              country="us"
-              pageSize={5}
-            />
-          }
-        />
+
+        {categories.map((cat) => (
+          <Route
+            key={cat}
+            path={`/${cat}`}
+            element={<News apiKey={apiKey} query={cat} pageSize={10} />}
+          />
+        ))}
       </Routes>
     </>
   );

@@ -2,7 +2,7 @@
   "name": "newsapp",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://Sameerahmad854.github.io/NewsMonkey-App",
+  "homepage": "https://sameerahmad854.github.io/NewsMonkey-App",
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
